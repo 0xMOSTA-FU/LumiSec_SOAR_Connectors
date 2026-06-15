@@ -1,0 +1,1 @@
+# OpenCTI SOAR Connector package
