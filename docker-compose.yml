@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # 1. The Python Connector Microservice
+  connector-service:
+    build: 
+      context: ./connector-service
+      dockerfile: Dockerfile
+    container_name: soar-connectors
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    environment:
+      - LOG_LEVEL=INFO
+    networks:
+      - soar-network
+
+  # 2. Your Node.js Backend Platform (Placeholder for your team's code)
+  platform-backend:
+    image: node:20-alpine
+    container_name: soar-platform
+    working_dir: /app
+    volumes:
+      - ./nodejs-backend:/app
+    # command: npm start
+    command: tail -f /dev/null # keeps container alive for now
+    depends_on:
+      - connector-service
+      - mongodb
+    ports:
+      - "3000:3000"
+    networks:
+      - soar-network
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/soar
+      - CONNECTOR_SERVICE_URL=http://connector-service:8000
+
+  # 3. MongoDB for storing configurations and playbooks
+  mongodb:
+    image: mongo:latest
+    container_name: soar-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    restart: unless-stopped
+    networks:
+      - soar-network
+
+networks:
+  soar-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
