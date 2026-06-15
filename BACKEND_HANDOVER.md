@@ -139,4 +139,4 @@ To finalize the SOAR platform, your Node.js system must implement:
 3. **Cron Job Scheduler:** E.g., `node-cron` to automatically trigger playbooks every 5 minutes (like pulling new alerts from Elastic).
 4. **State Management:** Keeping track of running, failed, and completed Playbooks.
 
-You have the engine. You have the weapons. Now, build the command center! 🚀
+You have the engine. You have the weapons. Now, build the command center! 
